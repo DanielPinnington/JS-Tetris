@@ -2,8 +2,6 @@ const canvas = document.getElementById('tetris');
 const context = canvas.getContext('2d');
 
 context.scale(20, 20);
-context.fillStyle = '#000';
-context.fillRect(0,0,canvas.width, canvas.height);
 
 const matrix = [
   [0,0,0], //0,0,0 here as it's easier to determine middle row.
@@ -12,6 +10,8 @@ const matrix = [
 ];
 
 function draw(){
+  context.fillStyle = '#000';
+  context.fillRect(0,0,canvas.width, canvas.height);
   drawMatrix(player.matrix, player.pos);
 }
 
@@ -26,9 +26,14 @@ function drawMatrix(matrix, offset){
   });
 }
 
+function update(){
+  draw();
+  requestAnimationFrame(update);
+}
+
 const player = {
   pos: {x: 5, y: 5},
   matrix: matrix,
 }
 
-draw();
+update();
