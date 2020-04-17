@@ -9,9 +9,30 @@ const matrix = [
   [0,1,0],
 ];
 
+function collides(arena, player){
+    const[m, o] = [player.matrix, player.pos];
+      for(let y = 0; y < m.length; ++y){
+        for(let x = 0; x < m[y].length; ++x){
+          if(m[y][x] !== 0 && (arena[y + o.y] && arena[y + o.y][x + o.x]) !== 0){
+            return true;
+      }
+    }
+  }
+      return false;
+}
+
+function createMatrix(w, h){
+  const matrix = [];
+  while(h--){
+    matrix.push(new Array(w).fill(0));
+  }
+  return matrix;
+}
 function draw(){
   context.fillStyle = '#000';
   context.fillRect(0,0,canvas.width, canvas.height);
+
+  drawMatrix(arena, {x: 0, y: 0});
   drawMatrix(player.matrix, player.pos);
 }
 
@@ -26,9 +47,29 @@ function drawMatrix(matrix, offset){
   });
 }
 
+function merge(arena, player){
+  player.matrix.forEach((row, y) => {
+    row.forEach((value, x) => {
+      if(value !== 0){
+        arena[y + player.pos.y][x + player.pos.x] = value;
+      }
+    });
+  });
+}
+
 let lastTime = 0;
 let dropCounter = 0;
 let dropInterval = 1000;
+
+function playerDrop(){
+  player.pos.y++;
+  if(collides(arena, player)){
+    player.pos.y--;
+    merge(arena, player);
+    player.pos.y = 0; //Resets position to top if collided.
+  }
+  dropCounter = 0; //resetting counter as we dont want another drop to happen immediately
+}
 
 function update(time = 0){
   const deltaTime = time - lastTime;
@@ -36,22 +77,27 @@ function update(time = 0){
 
   dropCounter += deltaTime;
   if(dropCounter > dropInterval){
-    player.pos.y++;
-    dropCounter = 0;
+    playerDrop();
   }
   draw();
   requestAnimationFrame(update);
 }
+
+const arena = createMatrix(12, 20);
+console.log(arena); console.table(arena);
+
 const player = {
   pos: {x: 5, y: 5},
   matrix: matrix,
 }
 
 document.addEventListener('keydown', event =>{
-  if       (event.keyCode == 37 || event.keyCode == 65){
+  if       (event.keyCode == 37 || event.keyCode == 65){ //Moving the shape left
     player.pos.x--;
-  } else if(event.keyCode == 39 || event.keyCode == 68){
+  } else if(event.keyCode == 39 || event.keyCode == 68){ //Moving the shape right
     player.pos.x++;
+  } else if(event.keyCode == 40 || event.keyCode == 83){ //Moving shape down
+    playerDrop();
   }
   console.log(event);
 
