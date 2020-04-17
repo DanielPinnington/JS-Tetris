@@ -71,6 +71,13 @@ function playerDrop(){
   dropCounter = 0; //resetting counter as we dont want another drop to happen immediately
 }
 
+function playerMove(dir){
+  player.pos.x += dir;
+  if(collides(arena, player)){
+    player.pos.x -= dir;
+  }
+}
+
 function update(time = 0){
   const deltaTime = time - lastTime;
   lastTime = time;
@@ -83,7 +90,7 @@ function update(time = 0){
   requestAnimationFrame(update);
 }
 
-const arena = createMatrix(12, 20);
+const arena = createMatrix(20, 20);
 console.log(arena); console.table(arena);
 
 const player = {
@@ -93,9 +100,9 @@ const player = {
 
 document.addEventListener('keydown', event =>{
   if       (event.keyCode == 37 || event.keyCode == 65){ //Moving the shape left
-    player.pos.x--;
+    playerMove(-1);
   } else if(event.keyCode == 39 || event.keyCode == 68){ //Moving the shape right
-    player.pos.x++;
+    playerMove(1);
   } else if(event.keyCode == 40 || event.keyCode == 83){ //Moving shape down
     playerDrop();
   }
