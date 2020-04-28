@@ -28,6 +28,7 @@ function createMatrix(w, h){
   }
   return matrix;
 }
+
 function draw(){
   context.fillStyle = '#000';
   context.fillRect(0,0,canvas.width, canvas.height);
@@ -57,6 +58,28 @@ function merge(arena, player){
   });
 }
 
+function playerRotate(dir){ //Player Rotation
+  rotate(player.matrix, dir);
+}
+
+function rotate(matrix, dir){
+  for(let y = 0; y < matrix.length; ++y){
+    for(let x = 0; x < y; ++x){
+      [
+        matrix[x][y], //Switching the X and Y
+        matrix[y][x],
+      ] = [
+        matrix[y][x],
+        matrix[x][y],
+      ];
+    }
+  }
+  if(dir > 0){
+    matrix.foreach(row => row.reverse());
+  } else{
+    matrix.reverse();
+  }
+}
 let lastTime = 0;
 let dropCounter = 0;
 let dropInterval = 1000;
@@ -105,6 +128,12 @@ document.addEventListener('keydown', event =>{
     playerMove(1);
   } else if(event.keyCode == 40 || event.keyCode == 83){ //Moving shape down
     playerDrop();
+  } else if (event.keyCode == 81){
+    playerRotate(-1);
+  } else if(event.keyCode == 87) {
+    playerRotate(1);
+  }{
+
   }
   console.log(event);
 
