@@ -100,7 +100,7 @@ function playerDrop(){
   if(collides(arena, player)){
     player.pos.y--;
     merge(arena, player);
-    player.pos.y = 0; //Resets position to top if collided.
+    playerReset();
   }
   dropCounter = 0; //resetting counter as we dont want another drop to happen immediately
 }
@@ -170,6 +170,13 @@ function createPiece(type){
     }
 }
 
+function playerReset(){
+  const pieces = 'ILJOTSZ';
+  player.matrix = createPiece(pieces[pieces.length * Math.random() | 0]);
+  player.pos.y = 0;
+  player.pos.x = (arena[0].length / 2 | 0) -
+                 (player.matrix[0].length / 2 | 0);
+}
 const arena = createMatrix(20, 20);
 console.log(arena); console.table(arena);
 
