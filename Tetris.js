@@ -124,13 +124,60 @@ function update(time = 0){
   requestAnimationFrame(update);
 }
 
+function createPiece(type){
+  if(type === 'T'){
+    return[
+      [0,0,0], //0,0,0 here as it's easier to determine middle row.
+      [1,1,1], //This 2d array represents a tetris shape.
+      [0,1,0],
+    ];
+  } else if(type === 'O'){
+    return[
+      [1,1], //0,0,0 here as it's easier to determine middle row.
+      [1,1], //This 2d array represents a tetris shape.
+    ];
+  }else if(type === 'L'){
+    return[
+    [0,1,0], //0,0,0 here as it's easier to determine middle row.
+    [0,1,1], //This 2d array represents a tetris shape.
+    [0,1,1],
+  ];
+  }else if(type === 'J'){
+    return[
+    [0,1,0], //0,0,0 here as it's easier to determine middle row.
+    [0,1,1], //This 2d array represents a tetris shape.
+    [1,1,0],
+  ];
+}else if(type === 'I'){
+  return[
+  [0,1,0, 0], //0,0,0 here as it's easier to determine middle row.
+  [0,1,0, 0], //This 2d array represents a tetris shape.
+  [0,1,0, 0],
+];
+} else if(type === 'S'){
+      return[
+      [0,1,1], //0,0,0 here as it's easier to determine middle row.
+      [1,1,0], //This 2d array represents a tetris shape.
+      [0,0,0],
+    ];
+  }
+  else if(type === 'Z'){
+        return[
+        [1,1,0], //0,0,0 here as it's easier to determine middle row.
+        [0,1,1], //This 2d array represents a tetris shape.
+        [0,0,0],
+      ];
+    }
+}
+
 const arena = createMatrix(20, 20);
 console.log(arena); console.table(arena);
 
 const player = {
   pos: {x: 5, y: 5},
-  matrix: matrix,
+  matrix: createPiece('T'),
 }
+
 
 document.addEventListener('keydown', event =>{
   if       (event.keyCode == 37 || event.keyCode == 65){ //Moving the shape left
