@@ -176,6 +176,12 @@ function playerReset(){
   player.pos.y = 0;
   player.pos.x = (arena[0].length / 2 | 0) -
                  (player.matrix[0].length / 2 | 0);
+
+                 if(collides(arena, player)){
+                   arena.forEach(row => row.fill(0)); //Starts the game over again once reaches the top
+                   window.location.href = 'youLostPage.html';
+                   element.appendChild("<h1> You Lost!!! </h1>");
+                 }
 }
 const arena = createMatrix(20, 20);
 console.log(arena); console.table(arena);
@@ -183,6 +189,10 @@ console.log(arena); console.table(arena);
 const player = {
   pos: {x: 5, y: 5},
   matrix: createPiece('T'),
+}
+
+function resetGame(){
+
 }
 
 
